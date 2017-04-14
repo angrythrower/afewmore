@@ -10,6 +10,18 @@ import time
 
 from collections import deque
 
+
+# print processing message
+def log(line):
+    if DEBUG:
+        print "DEBUG: " + str(round(float(time.time() - START_TIME), 3)) + "s - " + str(line)
+
+# print error message and exit program with errorcode 1
+def elog(line):
+    sys.stderr.write(line + "\n")
+    sys.exit(1)
+
+
 # class SecurityGroups:
 # members: gname -> group name
 #          gid -> group id
@@ -31,11 +43,11 @@ class SecurityGroups:
     # pubIp -> public ip address
     # pubDns -> public dns
     # uname -> login user name
-    # idFile -> identity file(.pem)
 class Instance:
     def __init__(self, instance_id):
-        out = execute("aws ec2 describe-instances --instance-id {0} --output json".format(instance_id))
+        out, err = execute("aws ec2 describe-instances --instance-id {0} --output json".format(instance_id))
 
+	if out:
             instance = json.loads(out)["Reservations"][0]["Instances"][0]
             self.insId = instance_id
             self.azone = instance["Placement"]["AvailabilityZone"]
@@ -45,10 +57,11 @@ class Instance:
             self.pubIp = instance["PublicIpAddress"]
             self.pubDns = instance["PublicDnsName"]
             self.uname = "root"
-            self.idFile = "~/.ssh/cs615-key2.pem"
             self.scgrps = []
             for group in instance["SecurityGroups"]:
                 self.scgrps.append(SecurityGroups(group))
+	else:
+	    elog(err)
 
     def __str__(self):
         res = "\tInstanceId: {0} \n\tAvailabilityZone: {1}\n\tKeyName: {2}\n\tImageId: {3}\n\tInstanceType: {4}\n\tPublicIpAddress: {5}".format(self.insId, self.azone, self.kname, self.imgId, self.itype, self.pubIp)
@@ -57,29 +70,4 @@ class Instance:
             res += str(group)
         return res
 
-
-# class Host:
-# description: store hsot infomation parsed from ~/.ssh/config file
-# members:
-#   host -> Host alias specified by user in config
-#   pubIp -> HostName specified by user in config
-#   user -> User specified by user in config
-#   idFile -> IdentityFile specified by user in config
-class Host:
-    def __init__(self, info_arr):
-        cache = {}
-        for item in info_arr:
-            cache[item[0]] = item[1]
-        self.host = cache["Host"]
-        self.pubIp = cache["HostName"]
-        self.user = cache["User"]
-        self.idFile = cache["IdentityFile"]
-
-    def __str__(self):
-        return "\n".join([
-            "\tHost: " + self.host, 
-            "\tHostName: " + self.pubIp,
-            "\tUser: " + self.user, 
-            "\tIdentityFile: " + self.idFile,
-            ])
 
