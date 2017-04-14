@@ -44,8 +44,6 @@ def execute(cmd, timeout=None):
     except OSError, oserror:
         return (None, oserror)
 
-def host_parser(dir):
-    pass
 
 def analyse_original_instance(instance_id, copy_dir):
     pass
