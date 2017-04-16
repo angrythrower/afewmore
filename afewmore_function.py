@@ -155,7 +155,20 @@ def scp(origin, targets, dir="/data"):
     pass
 
 def start(instance_id, copy_dir, num_new_ins):
-    pass
+    log("starting with {0} {1} {2}".format(instance_id, copy_dir, num_new_ins))
+    log("verbose: " + str(DEBUG))
+
+    origin_instance = analyse_original_instance(instance_id, copy_dir)
+    log("done checking source instance: " + origin_instance.insId)
+
+    log("duplicating instances...")
+    targets_queue = dup_instance(origin_instance, num_new_ins)
+    log("done duplicating instnaces...")
+
+    log("copying " + copy_dir + "...")
+    scp(origin_instance, targets_queue, copy_dir)
+
+    log("**********DONE**********\n")
 
 if __name__ == "__main__":
     pass
