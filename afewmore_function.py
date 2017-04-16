@@ -33,10 +33,10 @@ def execute(cmd, timeout=None):
             os.killpg(pro.pid, signal.SIGTERM)
             return (output, error)
 
-        if output:
+        if output or error.strip() == "error: unexpected filename: ..":
             # log("successfully executed command: \n\t{0}".format(cmd))
             return (output, None)
-        if error:
+        if error :
             log("error occurred when excuting command: \n\t{0}".format(cmd)) 
             return (None, error)
         return ("", None)
