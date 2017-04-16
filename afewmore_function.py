@@ -239,5 +239,146 @@ if __name__ == "__main__":
     }
     i = 1
 
+    while i < len(options):
+        op = options[i]
+
+    if op == "-h" and i is len(options) - 1:
+        print "Printing usage from manual\n\n\n"
+    else:
+            if op not in FLAGS or i is len(options) - 1:
+                    if (len(op) is not 19):
+                        elog("afewmore ERROR: Invalid argument {0}".format(op))
+                    if i is not len(options) - 1:
+                        elog("afewmore ERROR: Invalid argument after {0}".format(op))
+                    INSTANCE_ID = op
+                    start(INSTANCE_ID, COPY_DIR, NUM_NEW_INS)
+                    break;
+        if FLAGS[op]:
+            elog("afewmore ERROR: Multiple argument {0}".format(op))
+
+        if op == "-n":
+            FLAGS["-n"] = True
+            i += 1
+            try:
+                NUM_NEW_INS = int(options[i])
+            except (IndexError, ValueError) as err:
+                elog("afewmore ERROR: Invalid argument after {0}".format(op))
+        if op == "-d":
+            FLAGS["-d"] = True
+            i += 1
+            try:
+                COPY_DIR = options[i]
+            except ValueError, err:
+                elog("afewmore ERROR: Invalid argument after {0}".format(op))
+        if op == "-v":
+            FLAGS["-v"] = True
+            DEBUG = True
+        if op == "-h":
+            print "AFEWMORE(1)       BSD General Commands Manual          AFEWMORE(1)\n\
+    \n\
+    NAME\n\
+         afewmore -- duplicate EC2 instances with their data directory\
+    \n\
+    SYNOPSIS\n\
+         afewmore [-hv] [-d dir] [-n num] instance\n\
+    \n\
+    DESCRIPTION\n\
+         The afewmore tool can be used to duplicate a given EC2 instance.  When\n\
+         doing so, it creates multiple new instances and populates their data\n\
+         directory by copying the data from the original.\n\
+    \n\
+    OPTIONS\n\
+         The source instance is specified via the mandatory argument to afewmore.\n\
+         In addition, the following command-line options are supported:\n\
+    \n\
+         -d dir   Copy the contents of this data directory from the orignal source\n\
+              instance to all the new instances.  If not specified, defaults\n\
+              to /data.\n\
+    \n\
+         -h       Print a usage statement and exit.\n\
+    \n\
+         -n num   Create this many new instances.  If not specified, defaults to\n\
+              10.\n\
+    \n\
+         -v       Be verbose.\n\
+    \n\
+    DETAILS\n\
+         Frequently, it is necessary to duplicate a given server's configuration\n\
+         or setup.  While configuration management and service orchestration sys-\n\
+         tems may be able to perform this task, the afewmore tool allows for a\n\
+         trivial initial bootstrapping that only concerns itself with data dupli-\n\
+         cation, not host configuration.\n\
+    \n\
+         Upon invocation, afewmore will identify the type of EC2 instance in ques-\n\
+         tion and launch the requested number of duplicates.  It will then copy\n\
+         the contents of the given directory from the source instance to all of\n\
+         the newly created instances.\n\
+    \n\
+    OUTPUT\n\
+         By default, afewmore prints the instance IDs of the newly created EC2\n\
+         instances as the only output.  Unless an error occurs, no other output is\n\
+         generated.\n\
+    \n\
+         If the -v flag is given, afewmore may print meaningful diagnostic mes-\n\
+         sages as it progresses to stdout.\n\
+    \n\
+         Any errors encountered cause a meaningful error message to be printed to\n\
+         STDERR.\n\
+    \n\
+    ENVIRONMENT\n\
+         The afewmore tool is suitable to be used by any user and does not have\n\
+         any user-specific settings or credentials hard coded.\n\
+    \n\
+         afewmore assumes that the user has set up their environment for general\n\
+         use with the EC2 tools.  That is, it will not set or modify any environ-\n\
+         ment variables.\n\
+    \n\
+         afewmore also assumes that the user has set up their ~/.ssh/config file\n\
+         to access instances in EC2 via ssh(1) without any additional settings.\n\
+    \n\
+    EXIT STATUS\n\
+         The afewmore will exit with a return status of 0 under normal circum-\n\
+         stances.  If an error occurred, afewmore will exit with a value >0.\n\
+    \n\
+    EXAMPLES\n\
+         The following examples illustrate common usage of this tool.\n\
+    \n\
+         To create ten more instances of the EC2 instance i-0a1b2c3d4f and copy\n\
+         the contents of the '/data' directory from that instance:\n\
+    \n\
+           $ afewmore i-0a1b2c3d4f\n\
+           i-0a1b2c3d4f\n\
+           i-1a1b2c3d4f\n\
+           i-2a1b2c3d4f\n\
+           i-3a1b2c3d4f\n\
+           i-4a1b2c3d4f\n\
+           i-5a1b2c3d4f\n\
+           i-6a1b2c3d4f\n\
+           i-7a1b2c3d4f\n\
+           i-8a1b2c3d4f\n\
+           i-9a1b2c3d4f\n\
+           $ echo $?\n\
+           0\n\
+           $\n\
+    \n\
+         To create just one more instance and copy the contents of the directory\n\
+         '/usr/local/share':\n\
+    \n\
+           $ afewmore -n 1 i-0a1b2c3d4f\n\
+           i-1a1b2c3d4f\n\
+           $\n\
+    \n\
+    SEE ALSO\n\
+         aws help, ssh(1), tar(1), rsync(1)\n\
+    \n\
+    HISTORY\n\
+         afewmore was originally assigned by Jan Schaumann\n\
+         <jschauma@cs.stevens.edu> as a homework assignment for the class 'Aspects\n\
+         of System Administration' at Stevens Institute of Technology in the\n\
+         Spring of 2017.\n\
+    \n\
+    BSD             March 27, 2017                 BSD"
+            break
+        i += 1
 
 
