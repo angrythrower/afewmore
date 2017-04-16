@@ -180,6 +180,12 @@ def scp(origin, targets, dir="/data"):
                 log(target)
         else:
             targets.append(target)
+        
+        end_time = time.time()
+
+        if end_time - start_time < 5:
+            log("wating...")
+            time.sleep(5)
 
 def start(instance_id, copy_dir, num_new_ins):
     log("starting with {0} {1} {2}".format(instance_id, copy_dir, num_new_ins))
