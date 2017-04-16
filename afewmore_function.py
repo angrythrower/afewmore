@@ -149,7 +149,25 @@ def analyse_created_instance(created, target_dir):
     return created
 
 def dup_instance(origin_instance, num):
-    pass
+
+    instances_queue = [] # cache the instances references
+    origin = origin_instance
+    out, err = execute('aws ec2 run-instances --placement AvailabilityZone={0} --image-id {1} --security-group-ids {2} --count {3} --instance-type {4} --key-name \'{5}\' --query \'Instances[*].InstanceId\' --output json'
+        .format(
+        origin.azone,
+        origin.imgId,
+        " ".join([group.gid for group in origin.sgroups]),
+        num,
+        origin.itype,
+        origin.kname
+    ))
+    if out:
+        for instance_id in json.loads(out):
+            log("pushing instance: {0} to queue".format(instance_id))
+            instances_queue.append(Instance(instance_id))
+        return deque(instances_queue)
+    else:
+        elog(err)
     
 def scp(origin, targets, dir="/data"):
 
