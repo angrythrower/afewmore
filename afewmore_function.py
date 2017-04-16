@@ -230,6 +230,14 @@ if __name__ == "__main__":
     COPY_DIR = "/data" # default source directory to copy from
     START_TIME = time.time()
 
+    options = sys.argv 
+    FLAGS = {
+        "-h":False,
+        "-d":False,
+        "-n":False,
+        "-v":False,
+    }
+    i = 1
 
 
 
