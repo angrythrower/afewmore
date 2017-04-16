@@ -20,6 +20,12 @@ def elog(line):
     sys.stderr.write(line + "\n")
     sys.exit(1)
 
+# function execute:
+# description: execute a single command 
+# params: 
+#       cmd: command as string to be executed
+# return: will return (stdout, None) if successfully executed, return (None, stderr) if not
+# issue: timeout is not available to use
 def execute(cmd, timeout=None):
 
     try:
@@ -44,7 +50,12 @@ def execute(cmd, timeout=None):
     except OSError, oserror:
         return (None, oserror)
 
-
+# function analyse_original_instance:
+# description: check if source instance is accessible; check if source directory is valid; check if login user name is valid
+# params: 
+#       instance_id: source instances' id
+#       copy_dir: source directory
+# return: source instance object
 def analyse_original_instance(instance_id, copy_dir):
 
     log("analysing original instance: {0}".format(instance_id))
@@ -148,6 +159,12 @@ def analyse_created_instance(created, target_dir):
 
     return created
 
+# function dup_instance:
+# description: run n more instances
+# params: 
+#       origin_instance: source instance object
+#       num: number of instances to be started
+# return: a queue of newly stated instances object
 def dup_instance(origin_instance, num):
 
     instances_queue = [] # cache the instances references
@@ -168,7 +185,13 @@ def dup_instance(origin_instance, num):
         return deque(instances_queue)
     else:
         elog(err)
-    
+
+# function scp:
+# description: copy files from source to newly started instances
+# params: 
+#       origin: source instance object
+#       targets: number of instances to be started
+# return: a queue of newly stated instances object
 def scp(origin, targets, dir="/data"):
 
     # format target directory
@@ -205,6 +228,7 @@ def scp(origin, targets, dir="/data"):
             log("wating...")
             time.sleep(5)
 
+# entrance for the program
 def start(instance_id, copy_dir, num_new_ins):
     log("starting with {0} {1} {2}".format(instance_id, copy_dir, num_new_ins))
     log("verbose: " + str(DEBUG))
@@ -380,5 +404,16 @@ if __name__ == "__main__":
     BSD             March 27, 2017                 BSD"
             break
         i += 1
+
+
+
+
+
+
+
+
+
+
+
 
 
