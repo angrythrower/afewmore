@@ -46,7 +46,59 @@ def execute(cmd, timeout=None):
 
 
 def analyse_original_instance(instance_id, copy_dir):
-    pass
+    
+    log("analysing original instance: {0}".format(instance_id))
+
+    origin = Instance(instance_id)
+    while not origin.isReady():
+        origin.isReady()
+
+    # log("parsing host from: {0}".format(SSH_CONFIG_DIR))
+    # for host in host_parser(SSH_CONFIG_DIR):
+        # if host.pubIp == origin.pubIp or host.pubIp == origin.pubDns:
+            # log("host found: {0}".format(host))
+        # origin.setLoginUser(host.user)
+        # origin.setIdFile(host.idFile)
+
+    log('checking login username...')
+    out, err = execute("ssh {0}@{1} 'echo cs615'".format(origin.uname, origin.pubDns))
+
+    if err:
+        log(err)
+        elog("afewmore ERROR: cannot access instance: {0}".format(origin.insId))
+
+    else:
+        msg = out.split(' ')
+        if msg[0].strip() != "cs615":
+            log("login user is not {0}".format(origin.uname))
+            loginUser = msg[5].strip('"')
+            log("changing login user to {0}".format(loginUser))
+            origin.setLoginUser(loginUser)
+
+        else:
+            log("login user is {0}".format(origin.uname))            
+
+        # super user command: assume it is sudo
+        SUPER_USER_COMMAND = 'sudo'
+        # check if the instance have sudo command
+        out, err = execute("ssh {0}@{1} 'which sudo'".format(origin.uname, origin.pubDns))
+        if not out:
+            SUPER_USER_COMMAND = ''   
+        if origin.uname != 'root':
+            # use chown to change the ownership of the entire copy_dir to loginUser
+            log('changing dir ownership...')
+            execute("ssh {0}@{1} '{2} chown -R {0} {3}'".format(origin.uname, origin.pubDns, SUPER_USER_COMMAND, copy_dir))
+            # user chmod to change the mod of the entire copy_dir to -(d)rwx------
+            log('changing dir mode...')
+            execute("ssh {0}@{1} '{2} chmod -R 700 {3}'".format(origin.uname, origin.pubDns, SUPER_USER_COMMAND, copy_dir))
+        # check copy_dir
+        log("checking soruce directory...")
+        out, err = execute("ssh {0}@{1} 'ls -l {2}'".format(origin.uname, origin.pubDns, copy_dir))
+        if err:
+            elog("afewmore ERROR: cannot access directory or no such file")
+            print err
+
+    return origin
 
 def analyse_created_instance(created, target_dir):
     pass
