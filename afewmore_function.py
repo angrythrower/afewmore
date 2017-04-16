@@ -152,7 +152,29 @@ def dup_instance(origin_instance, num):
     pass
     
 def scp(origin, targets, dir="/data"):
-    pass
+    while len(targets) is not 0:
+        target = targets.popleft()
+        target.uname = origin.uname
+
+        start_time = time.time()
+
+        if target.isReady():
+            target = analyse_created_instance(target, dir)
+            log("copying to target: {0}".format(target.insId))
+            out, err = execute("scp -3C -r {0}@{1}:{2} {3}@{4}:{5}"
+                .format(origin.uname, origin.pubDns, dir + ".*", target.uname, target.pubDns, dir))
+            if err:
+                elog(err)
+            if out:
+                log(out)
+            else:
+                log("successfully copied!")
+                if not DEBUG:
+                    print "\t" + target.insId
+                # origin = target
+                log(target)
+        else:
+            targets.append(target)
 
 def start(instance_id, copy_dir, num_new_ins):
     log("starting with {0} {1} {2}".format(instance_id, copy_dir, num_new_ins))
