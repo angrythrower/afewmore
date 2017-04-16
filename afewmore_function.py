@@ -222,7 +222,13 @@ def start(instance_id, copy_dir, num_new_ins):
     log("**********DONE**********\n")
 
 if __name__ == "__main__":
-    pass
+
+    DEBUG = False  # program will print debug infomation to stdout when DEBUG is True
+    SSH_CONFIG_DIR = os.path.expanduser('~') + "/.ssh/config"  # default ssh config file location
+    INSTANCE_ID = "" # source instance id, should be provided from user
+    NUM_NEW_INS = 10 # default new number of instances to start
+    COPY_DIR = "/data" # default source directory to copy from
+    START_TIME = time.time()
 
 
 
