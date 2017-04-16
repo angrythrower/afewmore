@@ -131,13 +131,12 @@ def analyse_created_instance(created, target_dir):
         execute("ssh {0}@{1} '{2} mkdir -p {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
 
         # if user cannot log in as root user
-        if created.uname != 'root':
-            # use chown to change the ownership of the entire target_dir to loginUser
-            log('changing target dir ownership...')
-            execute("ssh {0}@{1} '{2} chown -R {0} {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
-            # user chmod to change the mod of the entire target_dir to -(d)rwx------
-            log('changing target dir mode...')
-            execute("ssh {0}@{1} '{2} chmod -R 700 {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
+        # use chown to change the ownership of the entire target_dir to loginUser
+        log('changing target dir ownership...')
+        execute("ssh {0}@{1} '{2} chown -R {0} {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
+        # user chmod to change the mod of the entire target_dir to -(d)rwx------
+        log('changing target dir mode...')
+        execute("ssh {0}@{1} '{2} chmod -R 700 {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
 
         # check target_dir
         log("checking target directory...")
