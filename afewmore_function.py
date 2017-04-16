@@ -152,6 +152,11 @@ def dup_instance(origin_instance, num):
     pass
     
 def scp(origin, targets, dir="/data"):
+
+    # format target directory
+    if dir[len(dir) - 1] != "/":
+        dir += "/"
+
     while len(targets) is not 0:
         target = targets.popleft()
         target.uname = origin.uname
