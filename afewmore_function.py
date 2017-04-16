@@ -46,7 +46,7 @@ def execute(cmd, timeout=None):
 
 
 def analyse_original_instance(instance_id, copy_dir):
-    
+
     log("analysing original instance: {0}".format(instance_id))
 
     origin = Instance(instance_id)
@@ -101,7 +101,52 @@ def analyse_original_instance(instance_id, copy_dir):
     return origin
 
 def analyse_created_instance(created, target_dir):
-    pass
+
+    log('checking login username...')
+    out, err = execute("ssh {0}@{1} 'echo cs615'".format(created.uname, created.pubDns))
+
+    if err:
+        log(err)
+        elog("afewmore ERROR: cannot access instance: {0}".format(created.insId))
+
+    else:
+        msg = out.split(' ')
+        if msg[0].strip() != "cs615":
+            log("login user is not {0}".format(created.uname))
+            loginUser = msg[5].strip('"')
+            log("changing login user to {0}".format(loginUser))
+            created.setLoginUser(loginUser)
+
+        else:
+            log("login user is {0}".format(created.uname))            
+
+        # super user command: assume it is sudo
+        SUPER_USER_COMMAND = 'sudo'
+        # check if the instance have sudo command
+        out, err = execute("ssh {0}@{1} 'which sudo'".format(created.uname, created.pubDns))
+        if not out:
+            SUPER_USER_COMMAND = '' 
+        # in case newly created instance doesn't have the target directory
+        log('creating target dir...')
+        execute("ssh {0}@{1} '{2} mkdir -p {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
+
+        # if user cannot log in as root user
+        if created.uname != 'root':
+            # use chown to change the ownership of the entire target_dir to loginUser
+            log('changing target dir ownership...')
+            execute("ssh {0}@{1} '{2} chown -R {0} {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
+            # user chmod to change the mod of the entire target_dir to -(d)rwx------
+            log('changing target dir mode...')
+            execute("ssh {0}@{1} '{2} chmod -R 700 {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
+
+        # check target_dir
+        log("checking target directory...")
+        out, err = execute("ssh {0}@{1} 'ls -l {2}'".format(created.uname, created.pubDns, target_dir))
+
+        if err:
+            elog("afewmore ERROR: cannot access directory or no such file")            
+
+    return created
 
 def dup_instance(origin_instance, num):
     pass
