@@ -43,7 +43,6 @@ class SecurityGroups:
     # pubDns -> public dns
     # uname -> login user name
     # idFile -> identity file(.pem)
-
 class Instance:
     def __init__(self, instance_id):
         out, err = execute("aws ec2 describe-instances --instance-id {0} --output json".format(instance_id))
@@ -58,7 +57,6 @@ class Instance:
             self.pubIp = instance["PublicIpAddress"]
             self.pubDns = instance["PublicDnsName"]
             self.uname = "root"
-            self.idFile = "~/.ssh/cs615-key2.pem"
             self.sgroups = []
             for group in instance["SecurityGroups"]:
                 self.sgroups.append(SecurityGroups(group))
@@ -183,6 +181,13 @@ def analyse_original_instance(instance_id, copy_dir):
             print err
 
     return origin
+
+# function analyse_created_instance:
+# description: check if created instance is accessible; creates target directory if does not exit; check if login user name is valid
+# params:
+#       created: target instances' id
+#       target_dir: target directory
+# return: target instance object
 
 def analyse_created_instance(created, target_dir):
 
