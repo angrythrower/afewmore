@@ -43,6 +43,7 @@ class SecurityGroups:
     # pubDns -> public dns
     # uname -> login user name
     # idFile -> identity file(.pem)
+
 class Instance:
     def __init__(self, instance_id):
         out, err = execute("aws ec2 describe-instances --instance-id {0} --output json".format(instance_id))
