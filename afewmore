@@ -48,18 +48,21 @@ class Instance:
         out, err = execute("aws ec2 describe-instances --instance-id {0} --output json".format(instance_id))
 
         if out:
-            instance = json.loads(out)["Reservations"][0]["Instances"][0]
-            self.insId = instance_id
-            self.azone = instance["Placement"]["AvailabilityZone"]
-            self.kname = instance["KeyName"]
-            self.imgId = instance["ImageId"]
-            self.itype = instance["InstanceType"]
-            self.pubIp = instance["PublicIpAddress"]
-            self.pubDns = instance["PublicDnsName"]
-            self.uname = "root"
-            self.sgroups = []
-            for group in instance["SecurityGroups"]:
-                self.sgroups.append(SecurityGroups(group))
+            try:
+                instance = json.loads(out)["Reservations"][0]["Instances"][0]
+                self.insId = instance_id
+                self.azone = instance["Placement"]["AvailabilityZone"]
+                self.kname = instance["KeyName"]
+                self.imgId = instance["ImageId"]
+                self.itype = instance["InstanceType"]
+                self.pubIp = instance["PublicIpAddress"]
+                self.pubDns = instance["PublicDnsName"]
+                self.uname = "root"
+                self.sgroups = []
+                for group in instance["SecurityGroups"]:
+                    self.sgroups.append(SecurityGroups(group))
+            except KeyError, err:
+                elog("afewmore ERROR: cannot get infomation from instance: {0}".format(instance_id))
         else:
             elog(err)
 
@@ -70,7 +73,7 @@ class Instance:
             res += str(group)
         return res
 
-    # will check if the instance is available to log in with command ssh-keyscan. 
+    # will check if the instance is available to log in with command ssh-keyscan.
     # If it is ready, this command will return the footprint infomation of this instance
     def isReady(self):
         log("checking instance: {0}".format(self.insId))
@@ -101,7 +104,7 @@ def execute(cmd, timeout=None):
 
     try:
         pro = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                               shell=True, preexec_fn=os.setsid) 
+                               shell=True, preexec_fn=os.setsid)
         output, error = pro.communicate()
 
         if timeout is not None:
@@ -114,7 +117,7 @@ def execute(cmd, timeout=None):
             # log("successfully executed command: \n\t{0}".format(cmd))
             return (output, None)
         if error :
-            log("error occurred when excuting command: \n\t{0}".format(cmd)) 
+            log("error occurred when excuting command: \n\t{0}".format(cmd))
             return (None, error)
         return ("", None)
 
@@ -134,7 +137,7 @@ def analyse_original_instance(instance_id, copy_dir):
     origin = Instance(instance_id)
     while not origin.isReady():
         origin.isReady()
-    
+
     log('checking login username...')
     out, err = execute("ssh {0}@{1} 'echo cs615'".format(origin.uname, origin.pubDns))
 
@@ -151,14 +154,14 @@ def analyse_original_instance(instance_id, copy_dir):
             origin.setLoginUser(loginUser)
 
         else:
-            log("login user is {0}".format(origin.uname))            
+            log("login user is {0}".format(origin.uname))
 
         # super user command: assume it is sudo
         SUPER_USER_COMMAND = 'sudo'
         # check if the instance have sudo command
         out, err = execute("ssh {0}@{1} 'which sudo'".format(origin.uname, origin.pubDns))
         if not out:
-            SUPER_USER_COMMAND = ''   
+            SUPER_USER_COMMAND = ''
         if origin.uname != 'root':
             # use chown to change the ownership of the entire copy_dir to loginUser
             log('changing dir ownership...')
@@ -200,14 +203,14 @@ def analyse_created_instance(created, target_dir):
             created.setLoginUser(loginUser)
 
         else:
-            log("login user is {0}".format(created.uname))            
+            log("login user is {0}".format(created.uname))
 
         # super user command: assume it is sudo
         SUPER_USER_COMMAND = 'sudo'
         # check if the instance have sudo command
         out, err = execute("ssh {0}@{1} 'which sudo'".format(created.uname, created.pubDns))
         if not out:
-            SUPER_USER_COMMAND = '' 
+            SUPER_USER_COMMAND = ''
         # in case newly created instance doesn't have the target directory
         log('creating target dir...')
         execute("ssh {0}@{1} '{2} mkdir -p {3}'".format(created.uname, created.pubDns, SUPER_USER_COMMAND, target_dir))
@@ -226,7 +229,7 @@ def analyse_created_instance(created, target_dir):
         out, err = execute("ssh {0}@{1} 'ls -l {2}'".format(created.uname, created.pubDns, target_dir))
 
         if err:
-            elog("afewmore ERROR: cannot access directory or no such file")            
+            elog("afewmore ERROR: cannot access directory or no such file")
 
     return created
 
@@ -292,7 +295,7 @@ def scp(origin, targets, dir="/data"):
                 log(target)
         else:
             targets.append(target)
-        
+
         end_time = time.time()
 
         if end_time - start_time < 5:
@@ -336,18 +339,14 @@ if __name__ == "__main__":
 
     while i < len(options):
         op = options[i]
-
-	if op == "-h" and i is len(options) - 1:
-	    print "\n"
-	else:
-            if op not in FLAGS or i is len(options) - 1:
-                if (len(op) is not 19):
-                    elog("afewmore ERROR: Invalid argument {0}. type ./afewmore -h for help".format(op))
-            	if i is not len(options) - 1:
-                    elog("afewmore ERROR: Invalid argument after {0}. type ./afewmore -h for help".format(op))
-            	    INSTANCE_ID = op
-            	    start(INSTANCE_ID, COPY_DIR, NUM_NEW_INS)
-            	    break;
+        if op not in FLAGS or (i is len(options) - 1 and op != "-h"):
+            if (len(op) is not 19):
+                elog("afewmore ERROR: Invalid argument {0}. type ./afewmore -h for help".format(op))
+            if i is not len(options) - 1:
+                elog("afewmore ERROR: Invalid argument after {0}. type ./afewmore -h for help".format(op))
+            INSTANCE_ID = op
+            start(INSTANCE_ID, COPY_DIR, NUM_NEW_INS)
+            break;
         if FLAGS[op]:
             elog("afewmore ERROR: Multiple argument {0}. type ./afewmore -h for help".format(op))
 
@@ -370,28 +369,30 @@ if __name__ == "__main__":
             DEBUG = True
         if op == "-h":
             print "AFEWMORE usage:\n\
-    \n\
-    SYNOPSIS\n\
-         afewmore [-hv] [-d dir] [-n num] instance\n\
-    \n\
-    OPTIONS\n\
-         The source instance is specified via the mandatory argument to afewmore.\n\
-         In addition, the following command-line options are supported:\n\
-    \n\
-         -d dir   Copy the contents of this data directory from the orignal source\n\
-              instance to all the new instances.  If not specified, defaults\n\
-              to /data.\n\
-    \n\
-         -h       Print a usage statement and exit.\n\
-    \n\
-         -n num   Create this many new instances.  If not specified, defaults to\n\
-              10.\n\
-    \n\
-         -v       Be verbose.\n\
-    \n\
-    "
+        \n\
+        SYNOPSIS\n\
+             afewmore [-hv] [-d dir] [-n num] instance\n\
+        \n\
+        OPTIONS\n\
+             The source instance is specified via the mandatory argument to afewmore.\n\
+             In addition, the following command-line options are supported:\n\
+        \n\
+             -d dir   Copy the contents of this data directory from the orignal source\n\
+                  instance to all the new instances.  If not specified, defaults\n\
+                  to /data.\n\
+        \n\
+             -h       Print a usage statement and exit.\n\
+        \n\
+             -n num   Create this many new instances.  If not specified, defaults to\n\
+                  10.\n\
+        \n\
+             -v       Be verbose.\n\
+        \n\
+        "
             break
         i += 1
+        if i == len(options):
+            elog("afewmore ERROR: insufficient arguments. type ./afewmore -h for help")
 
 
 
