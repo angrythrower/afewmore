@@ -134,14 +134,7 @@ def analyse_original_instance(instance_id, copy_dir):
     origin = Instance(instance_id)
     while not origin.isReady():
         origin.isReady()
-
-    # log("parsing host from: {0}".format(SSH_CONFIG_DIR))
-    # for host in host_parser(SSH_CONFIG_DIR):
-        # if host.pubIp == origin.pubIp or host.pubIp == origin.pubDns:
-            # log("host found: {0}".format(host))
-        # origin.setLoginUser(host.user)
-        # origin.setIdFile(host.idFile)
-
+    
     log('checking login username...')
     out, err = execute("ssh {0}@{1} 'echo cs615'".format(origin.uname, origin.pubDns))
 
