@@ -1,0 +1,199 @@
+commit 046d9cbb44673c315ee0089189aef3a81a25159b
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 21:21:45 2017 -0400
+
+    debug
+
+commit 5937bebd188d0d3a95deacee5eb0bd3103757271
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Sun Apr 16 20:26:54 2017 -0400
+
+    Adding README text for commentary on assignment. Cleaned up afewmore comments
+
+commit db5da9877d5f7909501ee475f669c013a2489819
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Sun Apr 16 20:11:32 2017 -0400
+
+    Resolved usage bug. Shortened usage statement. added description to analyse_created_instance
+
+commit fb18aa04fc0cd1705d469b1398ec4ec562fa44b1
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Sun Apr 16 20:02:53 2017 -0400
+
+    Fixed whitespace issue in running aws instance
+
+commit b004db48ca95d2fd9832eaf94226cc1af178d85b
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Sun Apr 16 19:56:25 2017 -0400
+
+    Combined classes and functions file into one
+
+commit 83a479390e3defa3e2e90524585a503b64c6ce86
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 15:53:50 2017 -0400
+
+    get readme.txt fomated
+
+commit 1b3f26c7bc1983c0d71eb2e1386618b7c8362f44
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 15:36:52 2017 -0400
+
+    write down the problems I met and how I solved them
+
+commit f9b18c501d17558d4d5cacb90f5b6b0547f9a405
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:38:36 2017 -0400
+
+    removed large file in data directory
+
+commit 722f835755b92faae3be6e50d377848fbf3e9ace
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:37:43 2017 -0400
+
+    include testing data
+
+commit d07c8b5392b690bb4cd7b953c875f06c5028af15
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:36:01 2017 -0400
+
+    modified demo.py
+
+commit d9aeb84be74ac0faa3922668d907f4b5b3981cc5
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:32:29 2017 -0400
+
+    test case added
+
+commit 4d3bebb64dd0ed21094857963f38a94da9e0c16d
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:30:09 2017 -0400
+
+    comments added
+
+commit c3338bf8c176b074c38d7540c1bc289c93123957
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:25:47 2017 -0400
+
+    implemented main function
+
+commit 5690b3d34748546d29ac26274df1c0a9daa6628b
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:23:58 2017 -0400
+
+    flag check added
+
+commit 4d3ecbc8d5e498d9f27f0871c252256d45d92a73
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:22:58 2017 -0400
+
+    global variables added
+
+commit 6f0d7258e26e924a82ff64d311d236fa4131a66c
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:20:03 2017 -0400
+
+    implemented dup_instance function
+
+commit ca0aae372a3206d072820c927d7f84cc32422a10
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:19:07 2017 -0400
+
+    fixed issue: scp can copy hidden files now
+
+commit 149d5b54239b6e336f96f05b89bb81857ad7775f
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:18:23 2017 -0400
+
+    debugging scp function
+
+commit 182d09740c08fea1eeb9248d5694128ad989d299
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:16:02 2017 -0400
+
+    implemented scp function with a few bugs
+
+commit 3e901aa19ef9645666d7690504d6e61462ed1894
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:14:15 2017 -0400
+
+    implemented start function, specify program structure
+
+commit e147ce0fdaf42983ef0ab6cb2633a209a7a9bb7a
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:13:05 2017 -0400
+
+    finished debuging
+
+commit 58c71d296edcdc469937ff1e0b9bcef987b4badf
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:12:20 2017 -0400
+
+    debuging analyse_created_instance
+
+commit 7ba5214baa5567302a02f6d0e80da5a620060a45
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:11:04 2017 -0400
+
+    implemented analyse_created_instance function with a few bugs
+
+commit 4ae20e5984c47048f1ddaa1f674fe1f1e4ad7f3d
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:07:30 2017 -0400
+
+    implemented analyse_original_instance
+
+commit 4f2da96c026d9d862922665d672942ac9288b3b6
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Sun Apr 16 14:05:19 2017 -0400
+
+    modified execute function
+
+commit 976d56970fecb26105316acc03ee05b267d50d56
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Fri Apr 14 19:50:30 2017 -0400
+
+    remove host_parser function
+
+commit dbac80efefecbf09aa3748a70d2a60351123266b
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Thu Apr 13 22:39:06 2017 -0400
+
+    After team discussion, modified classes to fit scope and added logging and error handling
+
+commit 91e86c925298b05760f27c87db2086e7ac97418f
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Wed Apr 12 14:19:54 2017 -0400
+
+    implementing execute function
+
+commit b014edb7bb3e69d09c367a77a428a190bb2d4c4f
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Wed Apr 12 14:08:04 2017 -0400
+
+    add function structure
+
+commit 51e224a8f255c8f78284ec801cddceb329cb1673
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Wed Apr 12 14:04:22 2017 -0400
+
+    demoing execute function
+
+commit dc102d720521889d1299ff56e1b358d41d5cb6f1
+Author: Tianxiao Yang <yangtianxiao123@gmail.com>
+Date:   Wed Apr 12 14:00:27 2017 -0400
+
+    initiating demo
+
+commit b414fe1a7b66dfaeef14e5604c7e7858c2361007
+Author: angrythrower <jd65@njit.edu>
+Date:   Tue Apr 11 20:00:59 2017 -0400
+
+    Delete afremore-classes.py
+    
+    Mis-spelling of file
+
+commit 21c30f48b83ea980101149a8e7f7c483f13a5c72
+Author: Josh-Erik Dolisca <jdolisca@stevens.edu>
+Date:   Tue Apr 11 19:58:36 2017 -0400
+
+    Created classes for afewmore tool: Security Groups, Instances, and Host.
